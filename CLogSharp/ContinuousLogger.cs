@@ -9,6 +9,7 @@ public class ContinuousLogger
 {
     public static string directory = Environment.CurrentDirectory;
     public static string fileName = "log";
+    public static string extensionName = "txt";
 
     public static void WriteLogInfo(string text, [CallerMemberName] string callerMethodName = "")
     {
@@ -17,7 +18,7 @@ public class ContinuousLogger
         DateTime dt = DateTime.Now;
         Encoding enc = Encoding.GetEncoding("UTF-8");
 
-        string path = directory + "/" + fileName + ".log";
+        string path = GetPath();
         using (StreamWriter writer = new StreamWriter(path, true, enc))
         {
             writer.WriteLine(String.Format("{0},{1},{2},{3}", dt.ToString("yyyy/MM/dd HH:mm:ss"), "Info", callerMethodName, text));
@@ -31,7 +32,7 @@ public class ContinuousLogger
         DateTime dt = DateTime.Now;
         Encoding enc = Encoding.GetEncoding("UTF-8");
 
-        string path = directory + "/" + fileName + ".log";
+        string path = GetPath();
         using (StreamWriter writer = new StreamWriter(path, true, enc))
         {
             writer.WriteLine(String.Format("{0},{1},{2},{3}", dt.ToString("yyyy/MM/dd HH:mm:ss"), "Error", callerMethodName, text));
@@ -40,7 +41,7 @@ public class ContinuousLogger
 
     private static void CheckFileExist()
     {
-        string path = directory + "/" + fileName + ".log";
+        string path = GetPath();
         if (!Directory.Exists(directory))
         {
             Directory.CreateDirectory(directory);
@@ -53,5 +54,10 @@ public class ContinuousLogger
                 using (FileStream fs = File.Create(path)) ;
             }
         }
+    }
+
+    private static string GetPath()
+    {
+        return (directory + "/" + fileName + "." + extensionName);
     }
 }
